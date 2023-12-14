@@ -102,7 +102,7 @@
 
   function createSignInButton(element) {
     var clientId = element.getAttribute("data-client_id");
-    var neynarLoginUrl = element.getAttribute("data-neynar_login_url");
+    var neynarLoginUrl = element.getAttribute("data-neynar_login_url") ?? 'https://app.neynar.com/login';
     var redirectUri = element.getAttribute("data-redirect_uri");
     var successCallback = element.getAttribute("data-success-callback");
     var theme = element.getAttribute("data-theme");
