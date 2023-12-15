@@ -102,10 +102,16 @@
 
   function createSignInButton(element) {
     var clientId = element.getAttribute("data-client_id");
-    var neynarLoginUrl = element.getAttribute("data-neynar_login_url") ?? 'https://app.neynar.com/login';
+    var neynarLoginUrl =
+      element.getAttribute("data-neynar_login_url") ??
+      "https://app.neynar.com/login";
     var redirectUri = element.getAttribute("data-redirect_uri");
     var successCallback = element.getAttribute("data-success-callback");
     var theme = element.getAttribute("data-theme");
+
+    // Size parameters
+    var width = element.getAttribute("data-width") ?? "205px"; // Default width
+    var height = element.getAttribute("data-height") ?? "48px"; // Default height
 
     if (!clientId || !neynarLoginUrl) {
       console.error("Neynar Signin: Missing required data attributes");
@@ -125,6 +131,8 @@
     };
 
     button.style.cursor = "pointer";
+    button.style.width = width;
+    button.style.height = height;
 
     element.appendChild(button);
   }
