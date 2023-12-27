@@ -119,7 +119,7 @@
     }
 
     // Check if the button already exists
-    var existingButton = element.querySelector("button");
+    var existingButton = document.getElementById("siwn-button");
     if (existingButton) {
       return; // If button exists, do not create a new one
     }
