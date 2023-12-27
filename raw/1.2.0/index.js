@@ -126,6 +126,8 @@
 
     var button = document.createElement("button");
 
+    button.id = "siwn-button";
+
     button.style.height = height ?? "48px";
     button.style.width = width;
     button.style.minWidth = "205px";
