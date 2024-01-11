@@ -121,7 +121,6 @@
     // Check if the button already exists
     var existingButton = document.getElementById("siwn-button");
     if (existingButton) {
-      console.error('Button already exists with id "siwn-button"');
       return; // If button exists, do not create a new one
     }
 
