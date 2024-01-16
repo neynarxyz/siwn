@@ -1,14 +1,14 @@
 {
-  "name": "neynar-test",
-  "version": "0.1.29",
+  "name": "@neynar/react-native-signin",
+  "version": "0.1.0",
   "keywords": [
-    "react-native",
-    "expo",
-    "barometer",
-    "air pressure",
-    "rn-barometer"
+    "react-native-signin-with-neynar",
+    "neynar",
+    "react-native-sign-in-with-neynar",
+    "expo-sign-in-with-neynar",
+    "expo-neynar"
   ],
-  "author": "",
+  "author": "Neynar",
   "license": "MIT",
   "scripts": {
     "clean": "del-cli ./build/*",

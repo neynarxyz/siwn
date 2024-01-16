@@ -1,0 +1,32 @@
+name: "Publish RN SIWN to NPM"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./react-native-sign-in-with-npm
+
+      - name: Build Package
+        run: npm run build
+        working-directory: ./react-native-sign-in-with-npm
+
+      - name: Set npm Config
+        run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish --access public
+        working-directory: ./react-native-sign-in-with-npm
