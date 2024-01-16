@@ -1,0 +1,40 @@
+{
+  "name": "neynar-test",
+  "version": "0.1.29",
+  "keywords": [
+    "react-native",
+    "expo",
+    "barometer",
+    "air pressure",
+    "rn-barometer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "clean": "del-cli ./build/*",
+    "build": "yarn run clean && tsc",
+    "prepare": "yarn run build"
+  },
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "devDependencies": {
+    "@types/react": "^18.2.47",
+    "@types/react-native": "^0.73.0",
+    "del-cli": "^5.1.0",
+    "react-native-unimodules": "^0.14.10",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-webview": "*"
+  },
+  "dependencies": {
+    "expo-sensors": "^12.5.0",
+    "react-native-svg": "^14.1.0",
+    "react-native-webview": "^13.6.4"
+  }
+}
