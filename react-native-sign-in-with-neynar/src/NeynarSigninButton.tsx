@@ -15,14 +15,14 @@ interface IProps {
   apiKey: string;
   clientId: string;
   successCallback: (data: ISuccessMessage) => void;
-  errorCallback: (error: any) => void;
+  errorCallback?: (error: any) => void;
 }
 
 export const NeynarSigninButton = ({
   apiKey,
   clientId,
   successCallback,
-  errorCallback,
+  errorCallback = () => {},
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
