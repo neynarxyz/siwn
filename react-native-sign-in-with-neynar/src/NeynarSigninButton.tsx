@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Linking,
+} from "react-native";
 import NeynarLogo from "./components/NeynarLogo";
 import WebView, {
   WebViewMessageEvent,
@@ -76,6 +82,16 @@ export const NeynarSigninButton = ({
                 console.log(navState)
               }
               onMessage={handleMessage}
+              originWhitelist={["*"]}
+              onShouldStartLoadWithRequest={(event) => {
+                if (event.url.match(/(https:\/\/)|(http:\/\/)/)) {
+                  return true;
+                }
+                Linking.openURL(event.url).catch((err) =>
+                  console.error("MP: An error occurred", err)
+                );
+                return false;
+              }}
             />
           )}
         </Modal>
