@@ -18,15 +18,15 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: ./react-native-sign-in-with-npm
+        working-directory: ./react-native-sign-in-with-neynar
 
       - name: Build Package
         run: npm run build
-        working-directory: ./react-native-sign-in-with-npm
+        working-directory: ./react-native-sign-in-with-neynar
 
       - name: Set npm Config
         run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
       - name: Publish to npm
         run: npm publish --access public
-        working-directory: ./react-native-sign-in-with-npm
+        working-directory: ./react-native-sign-in-with-neynar
