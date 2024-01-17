@@ -2,11 +2,11 @@
   "name": "@neynar/react-native-signin",
   "version": "0.1.2",
   "keywords": [
-    "react-native-signin-with-neynar",
+    "react-native",
     "neynar",
-    "react-native-sign-in-with-neynar",
-    "expo-sign-in-with-neynar",
-    "expo-neynar"
+    "signin-with-Neynar",
+    "farcaster",
+    "expo"
   ],
   "author": "Neynar",
   "license": "MIT",
