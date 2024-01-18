@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -11,6 +11,8 @@ import WebView, {
   WebViewMessageEvent,
   WebViewNavigation,
 } from "react-native-webview";
+import WarpcastLogo from "./components/WarpcastLogo";
+import FarcasterLogo from "./components/FarcasterLogo";
 
 export interface ISuccessMessage {
   fid: string;
@@ -47,29 +49,12 @@ export const NeynarSigninButton = ({
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
-  const [buttonText, setButtonText] = useState<ButtonText>(ButtonText.NEYNAR);
 
   const handleMessage = (event: WebViewMessageEvent) => {
     const data = JSON.parse(event.nativeEvent.data);
     successCallback(data);
     setModalVisible(false);
   };
-
-  useEffect(() => {
-    switch (variant) {
-      case Variant.NEYNAR:
-        setButtonText(ButtonText.NEYNAR);
-        break;
-      case Variant.WARPCAST:
-        setButtonText(ButtonText.WARPCAST);
-        break;
-      case Variant.FARCASTER:
-        setButtonText(ButtonText.FARCASTER);
-        break;
-      default:
-        setButtonText(ButtonText.NEYNAR);
-    }
-  }, [variant]);
 
   const handleOnPress = async () => {
     try {
@@ -88,11 +73,37 @@ export const NeynarSigninButton = ({
     }
   };
 
+  const getLogo = () => {
+    switch (variant) {
+      case Variant.NEYNAR:
+        return <NeynarLogo />;
+      case Variant.WARPCAST:
+        return <WarpcastLogo />;
+      case Variant.FARCASTER:
+        return <FarcasterLogo />;
+      default:
+        return <NeynarLogo />;
+    }
+  };
+
+  const getButtonText = () => {
+    switch (variant) {
+      case Variant.NEYNAR:
+        return ButtonText.NEYNAR;
+      case Variant.WARPCAST:
+        return ButtonText.WARPCAST;
+      case Variant.FARCASTER:
+        return ButtonText.FARCASTER;
+      default:
+        return ButtonText.NEYNAR;
+    }
+  };
+
   return (
     <>
       <TouchableOpacity onPress={handleOnPress} style={styles.signInButton}>
-        <NeynarLogo />
-        <Text style={styles.signInText}>{buttonText}</Text>
+        {getLogo()}
+        <Text style={styles.signInText}>{getButtonText()}</Text>
       </TouchableOpacity>
       {modalVisible && (
         <Modal
