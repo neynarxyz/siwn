@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -17,11 +17,25 @@ export interface ISuccessMessage {
   is_authenticated: boolean;
   signer_uuid: string;
 }
+
+export enum Variant {
+  NEYNAR = "neynar",
+  WARPCAST = "warpcast",
+  FARCASTER = "farcaster",
+}
+
+enum ButtonText {
+  NEYNAR = "Sign in with Neynar",
+  WARPCAST = "Connect Warpcast",
+  FARCASTER = "Connect Farcaster",
+}
+
 interface IProps {
   apiKey: string;
   clientId: string;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
+  variant?: Variant;
 }
 
 export const NeynarSigninButton = ({
@@ -29,15 +43,33 @@ export const NeynarSigninButton = ({
   clientId,
   successCallback,
   errorCallback = () => {},
+  variant = Variant.NEYNAR,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
+  const [buttonText, setButtonText] = useState<ButtonText>(ButtonText.NEYNAR);
 
   const handleMessage = (event: WebViewMessageEvent) => {
     const data = JSON.parse(event.nativeEvent.data);
     successCallback(data);
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    switch (variant) {
+      case Variant.NEYNAR:
+        setButtonText(ButtonText.NEYNAR);
+        break;
+      case Variant.WARPCAST:
+        setButtonText(ButtonText.WARPCAST);
+        break;
+      case Variant.FARCASTER:
+        setButtonText(ButtonText.FARCASTER);
+        break;
+      default:
+        setButtonText(ButtonText.NEYNAR);
+    }
+  }, [variant]);
 
   const handleOnPress = async () => {
     try {
@@ -60,7 +92,7 @@ export const NeynarSigninButton = ({
     <>
       <TouchableOpacity onPress={handleOnPress} style={styles.signInButton}>
         <NeynarLogo />
-        <Text style={styles.signInText}>Sign in with Neynar</Text>
+        <Text style={styles.signInText}>{buttonText}</Text>
       </TouchableOpacity>
       {modalVisible && (
         <Modal
