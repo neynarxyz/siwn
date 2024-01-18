@@ -7,6 +7,7 @@ import {
   Linking,
   ViewStyle,
   TextStyle,
+  Image,
 } from "react-native";
 import NeynarLogo from "./components/NeynarLogo";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
@@ -91,7 +92,7 @@ export const NeynarSigninButton = ({
   color,
   backgroundColor,
   customLogoUrl,
-  logoSize,
+  logoSize = "30",
   buttonStyles: customButtonStyle,
   textStyles: customTextStyle,
 }: IProps) => {
@@ -121,7 +122,7 @@ export const NeynarSigninButton = ({
     }
   };
 
-  const getLogo = (logoSize: string = "30") => {
+  const getLogo = () => {
     try {
       if (Number.isNaN(parseInt(logoSize)))
         throw new Error("logoSize must be a number");
@@ -152,6 +153,11 @@ export const NeynarSigninButton = ({
       default:
         return ButtonText.NEYNAR;
     }
+  };
+
+  const getCustomLogo = () => {
+    if (!customLogoUrl) return <></>;
+    return <Image source={{ uri: customLogoUrl }} style={styles.customLogo} />;
   };
 
   const defaultButtonStyle: ViewStyle = {
@@ -189,7 +195,7 @@ export const NeynarSigninButton = ({
   return (
     <>
       <TouchableOpacity onPress={handleOnPress} style={combinedButtonStyle}>
-        {!text && getLogo(logoSize)}
+        {!text ? getLogo() : getCustomLogo()}
         <Text style={combinedTextStyle}>{text || getButtonText()}</Text>
       </TouchableOpacity>
       {modalVisible && (
@@ -224,3 +230,11 @@ export const NeynarSigninButton = ({
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  customLogo: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
+  },
+});
