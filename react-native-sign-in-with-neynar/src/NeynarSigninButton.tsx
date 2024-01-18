@@ -185,7 +185,7 @@ export const NeynarSigninButton = ({
   return (
     <>
       <TouchableOpacity onPress={handleOnPress} style={combinedButtonStyle}>
-        {getLogo()}
+        {!text && getLogo()}
         <Text style={combinedTextStyle}>{text || getButtonText()}</Text>
       </TouchableOpacity>
       {modalVisible && (
@@ -204,18 +204,13 @@ export const NeynarSigninButton = ({
               domStorageEnabled={true}
               scalesPageToFit={true}
               startInLoadingState={true}
-              onNavigationStateChange={(navState: WebViewNavigation) =>
-                console.log(navState)
-              }
               onMessage={handleMessage}
               originWhitelist={["*"]}
               onShouldStartLoadWithRequest={(event) => {
                 if (event.url.match(/(https:\/\/)|(http:\/\/)/)) {
                   return true;
                 }
-                Linking.openURL(event.url).catch((err) =>
-                  console.error("MP: An error occurred", err)
-                );
+                Linking.openURL(event.url).catch((err) => errorCallback(err));
                 return false;
               }}
             />
