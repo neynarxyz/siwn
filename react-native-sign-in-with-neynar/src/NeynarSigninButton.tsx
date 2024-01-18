@@ -9,10 +9,7 @@ import {
   TextStyle,
 } from "react-native";
 import NeynarLogo from "./components/NeynarLogo";
-import WebView, {
-  WebViewMessageEvent,
-  WebViewNavigation,
-} from "react-native-webview";
+import WebView, { WebViewMessageEvent } from "react-native-webview";
 import WarpcastLogo from "./components/WarpcastLogo";
 import FarcasterLogo from "./components/FarcasterLogo";
 
@@ -70,7 +67,7 @@ interface IProps {
   color?: string;
   backgroundColor?: string;
   customLogoUrl?: string;
-  logoSize?: number;
+  logoSize?: string;
   buttonStyles?: ViewStyle;
   textStyles?: TextStyle;
 }
@@ -124,16 +121,23 @@ export const NeynarSigninButton = ({
     }
   };
 
-  const getLogo = () => {
-    switch (variant) {
-      case Variant.NEYNAR:
-        return <NeynarLogo />;
-      case Variant.WARPCAST:
-        return <WarpcastLogo />;
-      case Variant.FARCASTER:
-        return <FarcasterLogo />;
-      default:
-        return <NeynarLogo />;
+  const getLogo = (logoSize: string = "30") => {
+    try {
+      if (Number.isNaN(parseInt(logoSize)))
+        throw new Error("logoSize must be a number");
+      switch (variant) {
+        case Variant.NEYNAR:
+          return <NeynarLogo height={logoSize} width={logoSize} />;
+        case Variant.WARPCAST:
+          return <WarpcastLogo height={logoSize} width={logoSize} />;
+        case Variant.FARCASTER:
+          return <FarcasterLogo height={logoSize} width={logoSize} />;
+        default:
+          return <NeynarLogo height={logoSize} width={logoSize} />;
+      }
+    } catch (err) {
+      errorCallback(err);
+      return <NeynarLogo />;
     }
   };
 
@@ -185,7 +189,7 @@ export const NeynarSigninButton = ({
   return (
     <>
       <TouchableOpacity onPress={handleOnPress} style={combinedButtonStyle}>
-        {!text && getLogo()}
+        {!text && getLogo(logoSize)}
         <Text style={combinedTextStyle}>{text || getButtonText()}</Text>
       </TouchableOpacity>
       {modalVisible && (

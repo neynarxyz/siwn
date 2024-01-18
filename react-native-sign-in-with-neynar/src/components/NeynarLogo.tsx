@@ -7,7 +7,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-const NeynarLogo = ({ width = "30", height = "30" }: Props) => (
+const NeynarLogo = ({ width, height }: Props) => (
   <Svg width={width} height={height} viewBox="200 250 900 900" fill="none">
     <Defs>
       <LinearGradient

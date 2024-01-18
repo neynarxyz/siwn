@@ -7,7 +7,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-const FarcasterLogo = ({ width = "30", height = "30" }: Props) => (
+const FarcasterLogo = ({ width, height }: Props) => (
   <Svg width={width} height={height} viewBox="0 0 225 225" fill="none">
     <Rect width="225" height="225" rx="50" fill="#855DCD" />
     <Path

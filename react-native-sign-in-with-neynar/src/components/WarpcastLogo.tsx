@@ -7,7 +7,7 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-const WarpcastLogo = ({ width = "30", height = "30" }: Props) => (
+const WarpcastLogo = ({ width, height }: Props) => (
   <Svg width={width} height={height} viewBox="0 0 1260 1260" fill="none">
     <G clipPath="url(#clip0_1_2)">
       <Path
