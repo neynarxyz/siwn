@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Modal,
   Linking,
+  ViewStyle,
+  TextStyle,
 } from "react-native";
 import NeynarLogo from "./components/NeynarLogo";
 import WebView, {
@@ -18,6 +20,11 @@ export interface ISuccessMessage {
   fid: string;
   is_authenticated: boolean;
   signer_uuid: string;
+}
+
+export enum Theme {
+  DARK = "dark",
+  LIGHT = "light",
 }
 
 export enum Variant {
@@ -37,7 +44,34 @@ interface IProps {
   clientId: string;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
+  theme?: Theme;
   variant?: Variant;
+  height?: number;
+  width?: number;
+  borderRadius?: number;
+  fontSize?: number;
+  fontWeight?:
+    | "300"
+    | "normal"
+    | "bold"
+    | "100"
+    | "200"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900"
+    | undefined;
+  paddingVertical: number;
+  paddingHorizontal: number;
+  margin?: number;
+  text?: string;
+  color?: string;
+  backgroundColor?: string;
+  customLogoUrl?: string;
+  logoSize?: number;
+  styles?: ViewStyle;
 }
 
 export const NeynarSigninButton = ({
@@ -45,7 +79,22 @@ export const NeynarSigninButton = ({
   clientId,
   successCallback,
   errorCallback = () => {},
+  theme = Theme.LIGHT,
   variant = Variant.NEYNAR,
+  height,
+  width,
+  borderRadius,
+  fontSize,
+  fontWeight,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  text,
+  color,
+  backgroundColor,
+  customLogoUrl,
+  logoSize,
+  styles: customButtonStyle,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
@@ -99,11 +148,47 @@ export const NeynarSigninButton = ({
     }
   };
 
+  const themeBasedStyles =
+    theme === Theme.DARK ? darkThemeStyles : lightThemeStyles;
+
+  const defaultButtonStyle: ViewStyle = {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 24,
+    minWidth: 218,
+    height: height ?? 48,
+    width: width ?? 218,
+    borderRadius: borderRadius ?? 20,
+    backgroundColor: backgroundColor ?? "#fff",
+    paddingVertical: paddingVertical ?? 10,
+    paddingHorizontal: paddingHorizontal ?? 20,
+    margin: margin ?? 24,
+  };
+
+  const textStyle: TextStyle = {
+    fontSize: fontSize ?? 16,
+    fontWeight: fontWeight ?? "300",
+    color: color ?? "#000",
+    marginLeft: 10,
+  };
+
+  const combinedButtonStyle = StyleSheet.flatten([
+    defaultButtonStyle,
+    customButtonStyle,
+    themeBasedStyles.button,
+  ]);
+
+  const combinedTextStyle = StyleSheet.flatten([
+    textStyle,
+    themeBasedStyles.text,
+  ]);
+
   return (
     <>
-      <TouchableOpacity onPress={handleOnPress} style={styles.signInButton}>
+      <TouchableOpacity onPress={handleOnPress} style={combinedButtonStyle}>
         {getLogo()}
-        <Text style={styles.signInText}>{getButtonText()}</Text>
+        <Text style={combinedTextStyle}>{text || getButtonText()}</Text>
       </TouchableOpacity>
       {modalVisible && (
         <Modal
@@ -143,18 +228,20 @@ export const NeynarSigninButton = ({
   );
 };
 
-const styles = StyleSheet.create({
-  signInButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginBottom: 24,
-    minWidth: 218,
-    width: 218,
+const darkThemeStyles = StyleSheet.create({
+  button: {
+    backgroundColor: "#000",
   },
-  signInText: { fontSize: 16, fontWeight: "300", marginLeft: 10 },
+  text: {
+    color: "#fff",
+  },
+});
+
+const lightThemeStyles = StyleSheet.create({
+  button: {
+    backgroundColor: "#fff",
+  },
+  text: {
+    color: "#000",
+  },
 });
