@@ -63,15 +63,16 @@ interface IProps {
     | "800"
     | "900"
     | undefined;
-  paddingVertical: number;
-  paddingHorizontal: number;
+  paddingVertical?: number;
+  paddingHorizontal?: number;
   margin?: number;
   text?: string;
   color?: string;
   backgroundColor?: string;
   customLogoUrl?: string;
   logoSize?: number;
-  styles?: ViewStyle;
+  buttonStyles?: ViewStyle;
+  textStyles?: TextStyle;
 }
 
 export const NeynarSigninButton = ({
@@ -94,7 +95,8 @@ export const NeynarSigninButton = ({
   backgroundColor,
   customLogoUrl,
   logoSize,
-  styles: customButtonStyle,
+  buttonStyles: customButtonStyle,
+  textStyles: customTextStyle,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<string | null>(null);
@@ -148,19 +150,19 @@ export const NeynarSigninButton = ({
     }
   };
 
-  const themeBasedStyles =
-    theme === Theme.DARK ? darkThemeStyles : lightThemeStyles;
-
   const defaultButtonStyle: ViewStyle = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24,
-    minWidth: 218,
     height: height ?? 48,
     width: width ?? 218,
     borderRadius: borderRadius ?? 20,
-    backgroundColor: backgroundColor ?? "#fff",
+    backgroundColor: backgroundColor
+      ? backgroundColor
+      : theme === Theme.DARK
+      ? "#000000"
+      : "#ffffff",
     paddingVertical: paddingVertical ?? 10,
     paddingHorizontal: paddingHorizontal ?? 20,
     margin: margin ?? 24,
@@ -169,20 +171,16 @@ export const NeynarSigninButton = ({
   const textStyle: TextStyle = {
     fontSize: fontSize ?? 16,
     fontWeight: fontWeight ?? "300",
-    color: color ?? "#000",
+    color: color ? color : theme === Theme.DARK ? "#ffffff" : "#000000",
     marginLeft: 10,
   };
 
   const combinedButtonStyle = StyleSheet.flatten([
     defaultButtonStyle,
     customButtonStyle,
-    themeBasedStyles.button,
   ]);
 
-  const combinedTextStyle = StyleSheet.flatten([
-    textStyle,
-    themeBasedStyles.text,
-  ]);
+  const combinedTextStyle = StyleSheet.flatten([textStyle, customTextStyle]);
 
   return (
     <>
@@ -227,21 +225,3 @@ export const NeynarSigninButton = ({
     </>
   );
 };
-
-const darkThemeStyles = StyleSheet.create({
-  button: {
-    backgroundColor: "#000",
-  },
-  text: {
-    color: "#fff",
-  },
-});
-
-const lightThemeStyles = StyleSheet.create({
-  button: {
-    backgroundColor: "#fff",
-  },
-  text: {
-    color: "#000",
-  },
-});
