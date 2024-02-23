@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Text,
   TouchableOpacity,
@@ -8,69 +8,70 @@ import {
   ViewStyle,
   TextStyle,
   Image,
-} from "react-native";
-import NeynarLogo from "./components/NeynarLogo";
-import WebView, { WebViewMessageEvent } from "react-native-webview";
-import WarpcastLogo from "./components/WarpcastLogo";
-import FarcasterLogo from "./components/FarcasterLogo";
+} from 'react-native'
+import NeynarLogo from './components/NeynarLogo'
+import WebView, { WebViewMessageEvent } from 'react-native-webview'
+import WarpcastLogo from './components/WarpcastLogo'
+import FarcasterLogo from './components/FarcasterLogo'
+import { WebViewer } from './components/webViewer'
 
 export interface ISuccessMessage {
-  fid: string;
-  is_authenticated: boolean;
-  signer_uuid: string;
+  fid: string
+  is_authenticated: boolean
+  signer_uuid: string
 }
 
 export enum Theme {
-  DARK = "dark",
-  LIGHT = "light",
+  DARK = 'dark',
+  LIGHT = 'light',
 }
 
 export enum Variant {
-  NEYNAR = "neynar",
-  WARPCAST = "warpcast",
-  FARCASTER = "farcaster",
+  NEYNAR = 'neynar',
+  WARPCAST = 'warpcast',
+  FARCASTER = 'farcaster',
 }
 
 enum ButtonText {
-  NEYNAR = "Sign in with Neynar",
-  WARPCAST = "Connect Warpcast",
-  FARCASTER = "Connect Farcaster",
+  NEYNAR = 'Sign in with Neynar',
+  WARPCAST = 'Connect Warpcast',
+  FARCASTER = 'Connect Farcaster',
 }
 
 interface IProps {
-  apiKey: string;
-  clientId: string;
-  successCallback: (data: ISuccessMessage) => void;
-  errorCallback?: (error: any) => void;
-  theme?: Theme;
-  variant?: Variant;
-  height?: number;
-  width?: number;
-  borderRadius?: number;
-  fontSize?: number;
+  apiKey: string
+  clientId: string
+  successCallback: (data: ISuccessMessage) => void
+  errorCallback?: (error: any) => void
+  theme?: Theme
+  variant?: Variant
+  height?: number
+  width?: number
+  borderRadius?: number
+  fontSize?: number
   fontWeight?:
-    | "300"
-    | "normal"
-    | "bold"
-    | "100"
-    | "200"
-    | "400"
-    | "500"
-    | "600"
-    | "700"
-    | "800"
-    | "900"
-    | undefined;
-  paddingVertical?: number;
-  paddingHorizontal?: number;
-  margin?: number;
-  text?: string;
-  color?: string;
-  backgroundColor?: string;
-  customLogoUrl?: string;
-  logoSize?: string;
-  buttonStyles?: ViewStyle;
-  textStyles?: TextStyle;
+    | '300'
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+    | undefined
+  paddingVertical?: number
+  paddingHorizontal?: number
+  margin?: number
+  text?: string
+  color?: string
+  backgroundColor?: string
+  customLogoUrl?: string
+  logoSize?: string
+  buttonStyles?: ViewStyle
+  textStyles?: TextStyle
 }
 
 export const NeynarSigninButton = ({
@@ -92,78 +93,78 @@ export const NeynarSigninButton = ({
   color,
   backgroundColor,
   customLogoUrl,
-  logoSize = "30",
+  logoSize = '30',
   buttonStyles: customButtonStyle,
   textStyles: customTextStyle,
 }: IProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [authUrl, setAuthUrl] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false)
+  const [authUrl, setAuthUrl] = useState<string | null>(null)
 
   const handleMessage = (event: WebViewMessageEvent) => {
-    const data = JSON.parse(event.nativeEvent.data);
-    successCallback(data);
-    setModalVisible(false);
-  };
+    const data = JSON.parse(event.nativeEvent.data)
+    successCallback(data)
+    setModalVisible(false)
+  }
 
   const handleOnPress = async () => {
     try {
       const response = await fetch(
-        `https://api.neynar.com/v2/farcaster/login/authorize?api_key=${apiKey}&response_type=code&client_id=${clientId}`
-      );
+        `https://api.neynar.com/v2/farcaster/login/authorize?api_key=${apiKey}&response_type=code&client_id=${clientId}`,
+      )
 
-      if (!response.ok) throw new Error("Something went wrong");
+      if (!response.ok) throw new Error('Something went wrong')
 
-      const json = await response.json();
-      setAuthUrl(json.authorization_url);
-      setModalVisible(true);
+      const json = await response.json()
+      setAuthUrl(json.authorization_url)
+      setModalVisible(true)
     } catch (err) {
-      errorCallback(err);
-      setModalVisible(false);
+      errorCallback(err)
+      setModalVisible(false)
     }
-  };
+  }
 
   const getLogo = () => {
     try {
       if (Number.isNaN(parseInt(logoSize)))
-        throw new Error("logoSize must be a number");
+        throw new Error('logoSize must be a number')
       switch (variant) {
         case Variant.NEYNAR:
-          return <NeynarLogo height={logoSize} width={logoSize} />;
+          return <NeynarLogo height={logoSize} width={logoSize} />
         case Variant.WARPCAST:
-          return <WarpcastLogo height={logoSize} width={logoSize} />;
+          return <WarpcastLogo height={logoSize} width={logoSize} />
         case Variant.FARCASTER:
-          return <FarcasterLogo height={logoSize} width={logoSize} />;
+          return <FarcasterLogo height={logoSize} width={logoSize} />
         default:
-          return <NeynarLogo height={logoSize} width={logoSize} />;
+          return <NeynarLogo height={logoSize} width={logoSize} />
       }
     } catch (err) {
-      errorCallback(err);
-      return <NeynarLogo />;
+      errorCallback(err)
+      return <NeynarLogo />
     }
-  };
+  }
 
   const getButtonText = () => {
     switch (variant) {
       case Variant.NEYNAR:
-        return ButtonText.NEYNAR;
+        return ButtonText.NEYNAR
       case Variant.WARPCAST:
-        return ButtonText.WARPCAST;
+        return ButtonText.WARPCAST
       case Variant.FARCASTER:
-        return ButtonText.FARCASTER;
+        return ButtonText.FARCASTER
       default:
-        return ButtonText.NEYNAR;
+        return ButtonText.NEYNAR
     }
-  };
+  }
 
   const getCustomLogo = () => {
-    if (!customLogoUrl) return <></>;
-    return <Image source={{ uri: customLogoUrl }} style={styles.customLogo} />;
-  };
+    if (!customLogoUrl) return <></>
+    return <Image source={{ uri: customLogoUrl }} style={styles.customLogo} />
+  }
 
   const defaultButtonStyle: ViewStyle = {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 24,
     height: height ?? 48,
     width: width ?? 218,
@@ -171,26 +172,26 @@ export const NeynarSigninButton = ({
     backgroundColor: backgroundColor
       ? backgroundColor
       : theme === Theme.DARK
-      ? "#000000"
-      : "#ffffff",
+      ? '#000000'
+      : '#ffffff',
     paddingVertical: paddingVertical ?? 10,
     paddingHorizontal: paddingHorizontal ?? 20,
     margin: margin ?? 24,
-  };
+  }
 
   const textStyle: TextStyle = {
     fontSize: fontSize ?? 16,
-    fontWeight: fontWeight ?? "300",
-    color: color ? color : theme === Theme.DARK ? "#ffffff" : "#000000",
+    fontWeight: fontWeight ?? '300',
+    color: color ? color : theme === Theme.DARK ? '#ffffff' : '#000000',
     marginLeft: 10,
-  };
+  }
 
   const combinedButtonStyle = StyleSheet.flatten([
     defaultButtonStyle,
     customButtonStyle,
-  ]);
+  ])
 
-  const combinedTextStyle = StyleSheet.flatten([textStyle, customTextStyle]);
+  const combinedTextStyle = StyleSheet.flatten([textStyle, customTextStyle])
 
   return (
     <>
@@ -206,35 +207,40 @@ export const NeynarSigninButton = ({
           onRequestClose={() => setModalVisible(false)}
         >
           {authUrl && (
-            <WebView
-              source={{
-                uri: authUrl,
-              }}
-              javaScriptEnabled={true}
-              domStorageEnabled={true}
-              scalesPageToFit={true}
-              startInLoadingState={true}
-              onMessage={handleMessage}
-              originWhitelist={["*"]}
-              onShouldStartLoadWithRequest={(event) => {
-                if (event.url.match(/(https:\/\/)|(http:\/\/)/)) {
-                  return true;
-                }
-                Linking.openURL(event.url).catch((err) => errorCallback(err));
-                return false;
-              }}
-            />
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <WebViewer
+                uri={authUrl}
+                onMessage={handleMessage}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                scalesPageToFit={true}
+                startInLoadingState={true}
+                originWhitelist={['*']}
+                onShouldStartLoadWithRequest={(event) => {
+                  if (event.url.match(/(https:\/\/)|(http:\/\/)/)) {
+                    return true
+                  }
+                  Linking.openURL(event.url).catch((err) => errorCallback(err))
+                  return false
+                }}
+              />
+            </Modal>
           )}
         </Modal>
       )}
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   customLogo: {
     width: 30,
     height: 30,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
-});
+})
