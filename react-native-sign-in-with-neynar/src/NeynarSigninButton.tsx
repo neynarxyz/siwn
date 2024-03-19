@@ -217,11 +217,11 @@ export const NeynarSigninButton = ({
               onMessage={handleMessage}
               originWhitelist={["*"]}
               onShouldStartLoadWithRequest={(event) => {
-                if (event.url.match(/(https:\/\/)|(http:\/\/)/)) {
-                  return true;
+                if (event.url.startsWith("https://warpcast.com")) {
+                  Linking.openURL(event.url).catch((err) => errorCallback(err));
+                  return false;
                 }
-                Linking.openURL(event.url).catch((err) => errorCallback(err));
-                return false;
+                return true;
               }}
             />
           )}
