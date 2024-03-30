@@ -217,11 +217,21 @@ export const NeynarSigninButton = ({
               onMessage={handleMessage}
               originWhitelist={["*"]}
               onShouldStartLoadWithRequest={(event) => {
+                // For URLs that start with "https://warpcast.com", attempt to open them externally
                 if (event.url.startsWith("https://warpcast.com")) {
                   Linking.openURL(event.url).catch((err) => errorCallback(err));
-                  return false;
+                  return false; // Prevent WebView from loading this URL
                 }
-                return true;
+
+                // Allow URLs that start with "http://" or "https://"
+                if (event.url.match(/^(https:\/\/)|(http:\/\/)/)) {
+                  return true; // Load these URLs within the WebView
+                }
+
+                // Attempt to open all other URLs (not starting with "http://" or "https://")
+                // in the device's default browser.
+                Linking.openURL(event.url).catch((err) => errorCallback(err));
+                return false; // Prevent WebView from loading these URLs
               }}
             />
           )}
