@@ -214,7 +214,7 @@ export const NeynarSigninButton = ({
                   onPress={() => setModalVisible(false)}
                   style={styles.closeButton}
                 >
-                  <Text style={styles.closeButtonText}>{"Close x"}</Text>
+                  <Text style={styles.closeButtonText}>{"Close"}</Text>
                 </TouchableOpacity>
               </View>
               {authUrl && (
