@@ -43,7 +43,20 @@
     }
 
     var authOrigin = new URL(neynarLoginUrl).origin;
-    authWindow = window.open(authUrl.toString(), "_blank");
+
+    var isDesktop = window.matchMedia("(min-width: 800px)").matches;
+
+    var width = 600,
+      height = 700;
+    var left = window.screen.width / 2 - width / 2;
+    var top = window.screen.height / 2 - height / 2;
+
+    // Define window features for the popup
+    var windowFeatures = `width=${width},height=${height},top=${top},left=${left}`;
+
+    var windowOptions = isDesktop ? windowFeatures : "fullscreen=yes";
+
+    authWindow = window.open(authUrl.toString(), "_blank", windowOptions);
     window.addEventListener(
       "message",
       function (event) {
