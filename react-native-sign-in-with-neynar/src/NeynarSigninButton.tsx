@@ -9,6 +9,7 @@ import {
   TextStyle,
   Image,
   SafeAreaView,
+  View,
 } from "react-native";
 import NeynarLogo from "./components/NeynarLogo";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
@@ -207,38 +208,50 @@ export const NeynarSigninButton = ({
           onRequestClose={() => setModalVisible(false)}
         >
           <SafeAreaView style={{ flex: 1 }}>
-            {authUrl && (
-              <WebView
-                source={{
-                  uri: authUrl,
-                }}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                scalesPageToFit={true}
-                startInLoadingState={true}
-                onMessage={handleMessage}
-                originWhitelist={["*"]}
-                onShouldStartLoadWithRequest={(event) => {
-                  // For URLs that start with "https://warpcast.com", attempt to open them externally
-                  if (event.url.startsWith("https://warpcast.com")) {
+            <>
+              <View style={styles.closeButtonContainer}>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
+                  style={styles.closeButton}
+                >
+                  <Text style={styles.closeButtonText}>{"Close x"}</Text>
+                </TouchableOpacity>
+              </View>
+              {authUrl && (
+                <WebView
+                  source={{
+                    uri: authUrl,
+                  }}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  scalesPageToFit={true}
+                  startInLoadingState={true}
+                  onMessage={handleMessage}
+                  originWhitelist={["*"]}
+                  onShouldStartLoadWithRequest={(event) => {
+                    // For URLs that start with "https://warpcast.com", attempt to open them externally
+                    if (event.url.startsWith("https://warpcast.com")) {
+                      Linking.openURL(event.url).catch((err) =>
+                        errorCallback(err)
+                      );
+                      return false; // Prevent WebView from loading this URL
+                    }
+
+                    // Allow URLs that start with "http://" or "https://"
+                    if (event.url.match(/^(https:\/\/)|(http:\/\/)/)) {
+                      return true; // Load these URLs within the WebView
+                    }
+
+                    // Attempt to open all other URLs (not starting with "http://" or "https://")
+                    // in the device's default browser.
                     Linking.openURL(event.url).catch((err) =>
                       errorCallback(err)
                     );
-                    return false; // Prevent WebView from loading this URL
-                  }
-
-                  // Allow URLs that start with "http://" or "https://"
-                  if (event.url.match(/^(https:\/\/)|(http:\/\/)/)) {
-                    return true; // Load these URLs within the WebView
-                  }
-
-                  // Attempt to open all other URLs (not starting with "http://" or "https://")
-                  // in the device's default browser.
-                  Linking.openURL(event.url).catch((err) => errorCallback(err));
-                  return false; // Prevent WebView from loading these URLs
-                }}
-              />
-            )}
+                    return false; // Prevent WebView from loading these URLs
+                  }}
+                />
+              )}
+            </>
           </SafeAreaView>
         </Modal>
       )}
@@ -251,5 +264,23 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     resizeMode: "contain",
+  },
+  closeButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    paddingHorizontal: 10,
+    paddingTop: 15,
+  },
+  closeButton: {
+    borderWidth: 1,
+    borderColor: "#8d69d1",
+    borderRadius: 10,
+    padding: 8,
+    backgroundColor: "#fff",
+  },
+  closeButtonText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#8d69d1",
   },
 });
