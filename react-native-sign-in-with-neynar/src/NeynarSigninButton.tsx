@@ -40,7 +40,7 @@ enum ButtonText {
 }
 
 interface IProps {
-  authUrl: string;
+  fetchAuthUrl: () => Promise<string>;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
   theme?: Theme;
@@ -75,7 +75,7 @@ interface IProps {
 }
 
 export const NeynarSigninButton = ({
-  authUrl,
+  fetchAuthUrl,
   successCallback,
   errorCallback = () => {},
   theme = Theme.LIGHT,
@@ -97,6 +97,7 @@ export const NeynarSigninButton = ({
   textStyles: customTextStyle,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [authUrl, setAuthUrl] = useState<null | string>(null);
 
   const handleMessage = (event: WebViewMessageEvent) => {
     const data = JSON.parse(event.nativeEvent.data);
@@ -105,6 +106,8 @@ export const NeynarSigninButton = ({
   };
 
   const handleOnPress = async () => {
+    const authUrl = await fetchAuthUrl();
+    setAuthUrl(authUrl);
     setModalVisible(true);
   };
 
