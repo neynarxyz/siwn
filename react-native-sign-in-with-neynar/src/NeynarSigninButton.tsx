@@ -40,8 +40,7 @@ enum ButtonText {
 }
 
 interface IProps {
-  apiKey: string;
-  clientId: string;
+  authUrl: string;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
   theme?: Theme;
@@ -76,8 +75,7 @@ interface IProps {
 }
 
 export const NeynarSigninButton = ({
-  apiKey,
-  clientId,
+  authUrl,
   successCallback,
   errorCallback = () => {},
   theme = Theme.LIGHT,
@@ -99,7 +97,6 @@ export const NeynarSigninButton = ({
   textStyles: customTextStyle,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [authUrl, setAuthUrl] = useState<string | null>(null);
 
   const handleMessage = (event: WebViewMessageEvent) => {
     const data = JSON.parse(event.nativeEvent.data);
@@ -108,20 +105,7 @@ export const NeynarSigninButton = ({
   };
 
   const handleOnPress = async () => {
-    try {
-      const response = await fetch(
-        `https://api.neynar.com/v2/farcaster/login/authorize?api_key=${apiKey}&response_type=code&client_id=${clientId}`
-      );
-
-      if (!response.ok) throw new Error("Something went wrong");
-
-      const json = await response.json();
-      setAuthUrl(json.authorization_url);
-      setModalVisible(true);
-    } catch (err) {
-      errorCallback(err);
-      setModalVisible(false);
-    }
+    setModalVisible(true);
   };
 
   const getLogo = () => {
@@ -217,7 +201,7 @@ export const NeynarSigninButton = ({
                   <Text style={styles.closeButtonText}>{"Close"}</Text>
                 </TouchableOpacity>
               </View>
-              {authUrl && (
+              {authUrl ? (
                 <WebView
                   source={{
                     uri: authUrl,
@@ -250,6 +234,10 @@ export const NeynarSigninButton = ({
                     return false; // Prevent WebView from loading these URLs
                   }}
                 />
+              ) : (
+                <View>
+                  <Text>{"authUrl is required"}</Text>
+                </View>
               )}
             </>
           </SafeAreaView>
