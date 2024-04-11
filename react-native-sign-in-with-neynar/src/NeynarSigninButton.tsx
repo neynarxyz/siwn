@@ -40,7 +40,7 @@ enum ButtonText {
 }
 
 interface IProps {
-  fetchAuthUrl: () => Promise<string>;
+  fetchAuthorizationUrl: () => Promise<string>;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
   theme?: Theme;
@@ -75,7 +75,7 @@ interface IProps {
 }
 
 export const NeynarSigninButton = ({
-  fetchAuthUrl,
+  fetchAuthorizationUrl,
   successCallback,
   errorCallback = () => {},
   theme = Theme.LIGHT,
@@ -106,7 +106,7 @@ export const NeynarSigninButton = ({
   };
 
   const handleOnPress = async () => {
-    const authUrl = await fetchAuthUrl();
+    const authUrl = await fetchAuthorizationUrl();
     setAuthUrl(authUrl);
     setModalVisible(true);
   };
