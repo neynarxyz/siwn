@@ -106,9 +106,13 @@ export const NeynarSigninButton = ({
   };
 
   const handleOnPress = async () => {
-    const authUrl = await fetchAuthorizationUrl();
-    setAuthUrl(authUrl);
-    setModalVisible(true);
+    try {
+      const authUrl = await fetchAuthorizationUrl();
+      setAuthUrl(authUrl);
+      setModalVisible(true);
+    } catch (error) {
+      errorCallback(error);
+    }
   };
 
   const getLogo = () => {
