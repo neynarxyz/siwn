@@ -43,6 +43,7 @@ interface IProps {
   fetchAuthorizationUrl: () => Promise<string>;
   successCallback: (data: ISuccessMessage) => void;
   errorCallback?: (error: any) => void;
+  redirectUrl?: string;
   theme?: Theme;
   variant?: Variant;
   height?: number;
@@ -78,6 +79,7 @@ export const NeynarSigninButton = ({
   fetchAuthorizationUrl,
   successCallback,
   errorCallback = () => {},
+  redirectUrl,
   theme = Theme.LIGHT,
   variant = Variant.NEYNAR,
   height,
@@ -107,7 +109,10 @@ export const NeynarSigninButton = ({
 
   const handleOnPress = async () => {
     try {
-      const authUrl = await fetchAuthorizationUrl();
+      let authUrl = await fetchAuthorizationUrl();
+      if (redirectUrl) {
+        authUrl = `${authUrl}&deeplink_url=${encodeURIComponent(redirectUrl)}`;
+      }
       setAuthUrl(authUrl);
       setModalVisible(true);
     } catch (error) {
