@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ComponentProps, useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -73,6 +73,10 @@ interface IProps {
   logoSize?: string;
   buttonStyles?: ViewStyle;
   textStyles?: TextStyle;
+  /*
+    * The presentation style of the Modal exported by react-native. The default is "fullScreen".
+    */
+  presentationStyle?: ComponentProps<typeof Modal>["presentationStyle"];
 }
 
 export const NeynarSigninButton = ({
@@ -97,6 +101,7 @@ export const NeynarSigninButton = ({
   logoSize = "30",
   buttonStyles: customButtonStyle,
   textStyles: customTextStyle,
+  presentationStyle,
 }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [authUrl, setAuthUrl] = useState<null | string>(null);
@@ -202,6 +207,7 @@ export const NeynarSigninButton = ({
           transparent={false}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}
+          presentationStyle={presentationStyle}
         >
           <SafeAreaView style={{ flex: 1 }}>
             <>
